@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<?php
+
+$current_path = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['DOCUMENT_ROOT'] . dirname($_SERVER['SCRIPT_NAME']);
+
+ include('mysql_adapter.php'); ?>
+ <!DOCTYPE html>
 <html lang="en-US">
 
 <head>
