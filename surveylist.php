@@ -25,7 +25,7 @@ else
 
 <?php
 // Query Data
-$query = "SELECT * FROM surveys";
+$query = "SELECT * FROM surveys order by creation_date desc";
 ?>
 
 <?php
@@ -58,8 +58,9 @@ $result = mysql_query($query) or die("Database Error: " . mysql_error());
 		<?php
 			while($row = mysql_fetch_array($result)) 
 			{
+				$temp_survey_id = $row["survey_id"];
 				echo '<tr>';
-				echo '<td>'. $row['survey_name'] .'</td><td><a href="surveypage.php?survey_id="'. $row['survey_id'] .'">Take Survey</a></td><td><a href="surveyresults.php?survey_id="'. $row['survey_id'] .'">View Results</a></td>';
+				echo '<td>'. $row["survey_name"] .'</td><td><a href="takesurvey.php?survey_id='. $temp_survey_id .'">Take Survey</a></td><td><a href="surveyresults.php?survey_id='. $temp_survey_id .'">View Results</a></td>';
 				echo '</tr>';
 			}
 		?>

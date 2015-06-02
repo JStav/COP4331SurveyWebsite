@@ -1,8 +1,4 @@
-<?php
-
-$current_path = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['DOCUMENT_ROOT'] . dirname($_SERVER['SCRIPT_NAME']);
-
- include('mysql_adapter.php'); ?>
+<?php include('mysql_adapter.php'); ?>
  
  
  <?php
@@ -75,7 +71,7 @@ $current_path = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['DOCUMENT_ROOT'] . 
 			while($row2 = mysql_fetch_array($result2)) 
 			{
 				echo '<tr>';
-				echo '<td><input type="radio" id="o_id' . $row2['option_id'] . '" value="' . $row2['option_id'] . '"> '. $row2['option_text'] .'</td>';
+				echo '<td><input type="radio" name="options" id="o_id' . $row2['option_id'] . '" value="' . $row2['option_id'] . '"> '. $row2['option_text'] .'</td>';
 				echo '</tr>';
 			}
 			echo "</table>";
