@@ -13,7 +13,7 @@ if(isset($user_id) && $user_id > 0)
 	// Valid user then!
 	//echo "Cookie value = " . $_COOKIE['user_id'];
 	echo 'Hello ' . $first_name . ' ' . $last_name . ' ( <a href="mailto:' . $email . '">' . $email . '</a> ) ';
-	echo '<a href="#">logout</a>';
+	echo '<a href="./login.php?logout=1">logout</a>';
 }
 else
 {

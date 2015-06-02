@@ -1,6 +1,10 @@
 <?php include('mysql_adapter.php'); ?>
 
 <?php
+
+
+// TODO: Add a check to see if the user is logged in at THIS moment and auto redirect off this page if they're already logged in
+
 //print_r($_POST);
 //if(isset($_POST['userid']) && isset($_POST['pswrd']))  // apparently isset is true if teh value is "" hrm...
 if($_POST['userid'] != "" && $_POST['pswrd'] != "") 
@@ -33,6 +37,11 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 	else
 	{
 		echo "Bad Login!";
+		// nuke the cookies
+		setcookie("user_id", "", time()-3600);
+		setcookie("email", "", time()-3600);
+		setcookie("first_name", "", time()-3600);
+		setcookie("last_name", "", time()-3600);
 	}
 	// Set Cookie (php has built in functions for this)
 	// redirect to surveys page.
