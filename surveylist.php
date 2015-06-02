@@ -17,7 +17,7 @@ if(isset($user_id) && $user_id > 0)
 }
 else
 {
-	header("Location: login2.php");
+	header("Location: login.php");
 	die();
 }
 
