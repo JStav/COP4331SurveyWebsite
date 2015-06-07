@@ -1,38 +1,126 @@
-<?php include('mysql_adapter.php'); ?>
- 
+ <?php include('mysql_adapter.php'); ?>
+ <?php include('loginbox.php'); ?>
  
  <?php
- //print_r($_GET);
- $survey_id = $_GET["survey_id"];
+ $survey_id = $_POST["survey_id"];
+ $qtype_id = (int)$_POST["qtype_id"];
+ if($survey_id == "")
+ {
+	$survey_id = $_GET["survey_id"];	 
+ }
  if(!isset($survey_id)){die("Error.");} // fail the page if it doesn't have a survey_id
  $question_id = -1; // preset to something not possible as a future lockout
  
- if(isset($_GET["question_id"])){$question_id = $_GET["question_id"];}
- else
- {
-	$query0 = "select question_id from questions where survey_id = " . $survey_id . " order by question_id asc";
-	//print_r($query0);
+ 
+	// DO NOT RENAME THESE $query0 variable names (it'll break things)
+ 	$query0 = "select count(question_id) as counter_value, min(question_id) as question_id from questions where survey_id = " . $survey_id . " order by question_id asc";
+	nice_print_r($query0);
 	$result0 = mysql_query($query0) or die("Database Error0: " . mysql_error()); 
 	$row0 = mysql_fetch_array($result0);
-	$question_id = $row0["question_id"];
- }
- 
+	$total_questions = (int)$row0["counter_value"];
+	
+	// Logic:
+	// If we can find an answer for the final question, then this user has already DONE this survey, so return a response saying they have.
+	
+	$query = "select count(*) as counter_value from answers where user_id = " . $user_id . " and survey_id = " . $survey_id . " and question_id = " . $total_questions . " order by question_id asc";
+	//nice_print_r($query);
+	$result = mysql_query($query) or die("Database Error: " . mysql_error()); 
+	$row = mysql_fetch_array($result);
+	
+	$final_output = 'Thank you for completing the survey.<br><a href="surveylist.php">Click Here</a> to return to survey list.';
+	if((int)$row["counter_value"]>0)
+	{
+		//nice_print_r((int)$row["counter_value"]);
+		die($final_output);
+		
+	}
+	
+	if(isset($_POST["question_id"]))
+	{
+		$question_id = $_POST["question_id"];
+		// check to see if next or previous or final submit was used here
+		$question_submitted = false;
+		$nextBtn =$_POST['nextBtn']; 
+		$prevBtn =$_POST['prevBtn']; 
+		$finshBtn =$_POST['finshBtn']; 
+		if((int)$nextBtn==1 || (int)$prevBtn==-1 || (int)$finshBtn==2)
+		{
+			$question_submitted = true;
+		}
+		else
+		{
+			echo '<pre>'.print_r($_POST).'</pre>';
+			echo "Button not pressed";
+		}
+		
+		if($question_submitted)
+		{
+			// if not short answer question
+			if($qtype_id != 3)
+			{
+				$options = $_POST["options"];
+				sanitize_value($options);
+
+				$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$options."')";	
+				//echo "<p>NOT QTYPE 3:".$query."</p>";
+			}
+			else if($qtype_id==3)
+			{
+				// short answer type			
+				$answer = $_POST["answer"];
+				sanitize_value($answer);				
+				$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$answer."')";	
+				//echo "<p>QTYPE 3:".$query."</p>";
+				//die($query);
+			}
+			// we need to store the last question in the database
+			
+			//print_r($query0);
+			$result = mysql_query($query) or die("Database Error0: " . mysql_error()); 
+			
+			if((int)$finshBtn==2)
+			{
+				die($final_output);
+			}
+		}
+		if((int)$nextBtn==1)
+		{
+			if($question_id < $total_questions){$question_id++;}
+		}
+		else if((int)$prevBtn==-1)
+		{
+			if($question_id <= $total_questions && $question_id > 1){$question_id--;}
+		}
+
+		
+	}
+	else
+	{
+		$question_id = $row0["question_id"];
+		
+		
+	}
+
  // TODO: Add binding of php variable to avoid php injections
  $query = "
  select *
  from questions
  where survey_id = " . $survey_id . " and question_id = " . $question_id;
- //print_r($query);
+ nice_print_r($query);
  
  // Get the data
  $result = mysql_query($query) or die("Database Error1: " . mysql_error()); 
  $row = mysql_fetch_array($result);
  
  // check if it's not a fill in the blank type question
- if($row["question_id"]!=3) // that hardcoding tho...
+ $qtype_id = $row["qtype_id"];
+ nice_print_r($qtype_id);
+ if((int)$qtype_id!=3) // that hardcoding tho...
  {
 	$query2 = "select * from question_options where question_id = " . $question_id . " order by option_id asc";
+	nice_print_r($query2);
 	$result2 = mysql_query($query2) or die("Database Error2: " . mysql_error()); 
+	//echo "<p>got question id: " . $question_id . "</p>";
  }
 
  
@@ -50,8 +138,8 @@
 
 <body>
 
-	<form id="takeSurveyForm">
-	Question: <span id="questionNumber"><?php echo $row["question_id"]; ?></span> 
+	<form name="takeSurveyForm" id="takeSurveyForm" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+	Question: <span id="questionNumber"><?php echo $question_id . " / " . $total_questions; ?></span> 
 	<!--Load question number above-->
 	<br>
 	
@@ -61,11 +149,18 @@
 	<div id="questionAnswerChoices">
 	
 	<?php
-		if($row["question_id"]==3)
+		if($row["qtype_id"]==3)
 		{
 			echo '<input type="text" id="answer" name="answer">';
 		}
-		else
+		else if($row["qtype_id"]==1)
+		{
+			echo "<table>";
+			echo '<tr><td><input type="radio" name="options" id="o_id1" value="True">True</td></tr>';
+			echo '<tr><td><input type="radio" name="options" id="o_id2" value="False">False</td></tr>';
+			echo "</table>";
+		}
+		else if($row["qtype_id"]==2)
 		{
 			echo "<table>";
 			while($row2 = mysql_fetch_array($result2)) 
@@ -79,12 +174,28 @@
 	?>
 	</div>
 	<!--Load question answer choices here-->
-	</form> 
+
 	
 	<br><br>
+	<button type="reset" >Clear</button><br>
+	<input type="hidden" id="survey_id" name="survey_id" value="<?php echo $survey_id; ?>">
+	<input type="hidden" id="question_id" name="question_id" value="<?php echo $question_id; ?>">
+	<input type="hidden" id="qtype_id" name="qtype_id" value="<?php echo $qtype_id; ?>">
+	<?php
 	
-	 <button type="button" form="takeSurveyForm" onclick="">Next Question</button> 
-	 <button type="reset" form="takeSurveyForm">Clear</button>
-	 <button type="submit" form="takeSurveyForm">Done</button> 
-	
+	if($question_id <= $total_questions && $question_id > 1)
+	{
+		echo '<button type="submit" id="prevBtn" name="prevBtn" value="-1">Previous Question</button> ';
+	}
+	if($question_id < $total_questions)
+	{
+		echo '<button type="submit" id="nextBtn" name="nextBtn"  value="1">Next Question</button> ';
+	}
+	else
+	{
+		echo '<button type="submit" id="finshBtn" name="finshBtn"  value="2">Submit Survey</button>';
+	}
+	?> 
+	  
+	</form> 
 </body>

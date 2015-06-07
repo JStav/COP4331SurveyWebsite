@@ -1,9 +1,35 @@
 <?php include('mysql_adapter.php'); ?>
 
 <?php
+function clearCookies()
+{
+		// nuke the cookies
+		setcookie("user_id", "", time()-3600);
+		setcookie("email", "", time()-3600);
+		setcookie("first_name", "", time()-3600);
+		setcookie("last_name", "", time()-3600);
+	
+}
+// Clear cookie check
+if($_GET["logout"]==1)
+{
+	clearCookies();
+}
+$user_id = $_COOKIE['user_id'];
+if(isset($user_id) && $user_id > 0)
+{
+	// Valid user then!
+	//echo "Cookie value = " . $_COOKIE['user_id'];
+	//echo 'Hello ' . $first_name . ' ' . $last_name . ' ( <a href="mailto:' . $email . '">' . $email . '</a> ) ';
+	//echo '<a href="./login2.php?logout=1">logout</a>';
+	// Already logged in, don't display this page
+	header("Location: surveylist.php");
+	die();
+}
 
+?>
 
-// TODO: Add a check to see if the user is logged in at THIS moment and auto redirect off this page if they're already logged in
+<?php
 
 //print_r($_POST);
 //if(isset($_POST['userid']) && isset($_POST['pswrd']))  // apparently isset is true if teh value is "" hrm...
@@ -37,11 +63,7 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 	else
 	{
 		echo "Bad Login!";
-		// nuke the cookies
-		setcookie("user_id", "", time()-3600);
-		setcookie("email", "", time()-3600);
-		setcookie("first_name", "", time()-3600);
-		setcookie("last_name", "", time()-3600);
+		clearCookies();
 	}
 	// Set Cookie (php has built in functions for this)
 	// redirect to surveys page.
@@ -79,7 +101,7 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 
   </aside>
  <aside id="signup">
-<h1> Don't have an account? <a href="signup.html"> Sign up! </a></h1>
+<h1> Don't have an account? <a href="signup.php"> Sign up! </a></h1>
  </aside> 
 </body>
 </html>
