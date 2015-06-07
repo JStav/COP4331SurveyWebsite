@@ -21,7 +21,7 @@ ORDER BY answers.question_id asc";
 //nice_print_r($query);
 $result = mysql_query($query) or die("1Database Error: " . mysql_error());
 $row = mysql_fetch_array($result);
-$jsonString = "[";
+$jsonString = '{"data":[';
  
 while($row = mysql_fetch_array($result)) 
 {
@@ -37,6 +37,6 @@ while($row = mysql_fetch_array($result))
 	$jsonString .= '},';
 }
 $jsonString = rtrim($jsonString, ","); // remove that last comma.
-$jsonString .= "]";
+$jsonString .= "]}";
 echo $jsonString;
 ?>
