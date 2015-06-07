@@ -17,7 +17,7 @@ INNER JOIN questions
 ON questions.question_id = answers.question_id
 AND questions.survey_id = answers.survey_id
 WHERE answers.survey_id = " . sanitize_value($survey_id) . "
-ORDER BY answers.question_id asc";
+ORDER BY answers.ans_timestamp desc";
 //nice_print_r($query);
 $result = mysql_query($query) or die("1Database Error: " . mysql_error());
 $row = mysql_fetch_array($result);
@@ -33,6 +33,7 @@ while($row = mysql_fetch_array($result))
 	$jsonString .= '"email":"' . $row["email"] . '",';
 	$jsonString .= '"first_name":"' . $row["first_name"] . '",';
 	$jsonString .= '"last_name":"' . $row["last_name"] . '",';
+	$jsonString .= '"ans_timestamp":"' . $row["ans_timestamp"] . '",';
 	$jsonString .= '"answer":"' . $row["answer"] . '"';
 	$jsonString .= '},';
 }

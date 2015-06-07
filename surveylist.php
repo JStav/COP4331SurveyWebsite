@@ -40,7 +40,7 @@ $result = mysql_query($query) or die("Database Error: " . mysql_error());
 			{
 				$temp_survey_id = $row["survey_id"];
 				echo '<tr>';
-				echo '<td>'. $row["survey_name"] .'</td><td><a href="takesurvey.php?survey_id='. $temp_survey_id .'">Take Survey</a></td><td><a href="surveyresults.php?survey_id='. $temp_survey_id .'">View Results</a></td>';
+				echo '<td>'. $row["survey_name"] .'</td><td><a href="takesurvey.php?survey_id='. $temp_survey_id .'">Take Survey</a></td><td><a href="liveresults.php?survey_id='. $temp_survey_id .'">View Results</a></td>';
 				echo '</tr>';
 			}
 		?>
