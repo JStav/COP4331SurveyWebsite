@@ -19,8 +19,8 @@ AND questions.survey_id = answers.survey_id
 WHERE answers.survey_id = " . sanitize_value($survey_id) . "
 ORDER BY answers.ans_timestamp desc";
 //nice_print_r($query);
-$result = mysql_query($query) or die("1Database Error: " . mysql_error());
-$row = mysql_fetch_array($result);
+// DO NOT USE run_query for this query!! the data this page echos must be perfect!
+$result = mysql_query($query) or die("Database Error: " . mysql_error()); 
 $jsonString = '{"data":[';
  
 while($row = mysql_fetch_array($result)) 

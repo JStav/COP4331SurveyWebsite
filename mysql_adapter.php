@@ -25,4 +25,12 @@ $mysql_password = "testpass1";
 		print_r($input);
 		echo '|</pre></p>';
 	}
+	
+	
+	function run_query($query)
+	{
+		nice_print_r($query);
+		$result = mysql_query($query) or die("Database Error: " . mysql_error()); 
+		return $result;
+	}
 ?> 

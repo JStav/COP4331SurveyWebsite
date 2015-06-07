@@ -11,5 +11,5 @@
 		setcookie("first_name", "", time()-3600);
 		setcookie("last_name", "", time()-3600);
 	echo "EVERYTHING WIPED!";
-	echo '<p><a href="http://jstav.site50.net/will_working_dir/surveylist.php">Go to survey list</a></p>';
+	echo '<p><a href="surveylist.php">Go to survey list</a></p>';
 ?>

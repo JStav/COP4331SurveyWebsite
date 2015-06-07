@@ -17,6 +17,14 @@ if($survey_id == "")
 	<meta charset="UTF-8">
 	<script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript">
+	
+	function getJSONURL()
+	{
+		var milliseconds = (new Date).getTime();
+		var jsonPAGEURL = "./livejson.php?milli="+milliseconds+"&survey_id=<?php echo $survey_id; ?>";
+		//alert(jsonPAGEURL);
+		return jsonPAGEURL;
+	}
 	var obj;
 	function displayData()
 	{
@@ -51,7 +59,7 @@ if($survey_id == "")
 			//$("#timer").html(secondsVar%6); // this isn't working ugh
 			//if(secondsVar%6==0)
 			//{
-				$.get("./livejson.php?survey_id=<?php echo $survey_id; ?>", function(data)
+				$.get(getJSONURL(), function(data)
 				{
 					obj = jQuery.parseJSON(data);
 					displayData();
@@ -62,7 +70,7 @@ if($survey_id == "")
 
 
 		// Used for initial
-		$.get("./livejson.php?survey_id=<?php echo $survey_id; ?>", function( data )
+		$.get(getJSONURL(), function( data )
 		{
 		  obj = jQuery.parseJSON(data);
 		  displayData();

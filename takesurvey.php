@@ -14,8 +14,7 @@
  
 	// DO NOT RENAME THESE $query0 variable names (it'll break things)
  	$query0 = "select count(question_id) as counter_value, min(question_id) as question_id from questions where survey_id = " . $survey_id . " order by question_id asc";
-	nice_print_r($query0);
-	$result0 = mysql_query($query0) or die("Database Error0: " . mysql_error()); 
+	$result0 = run_query($query0);
 	$row0 = mysql_fetch_array($result0);
 	$total_questions = (int)$row0["counter_value"];
 	
@@ -23,8 +22,7 @@
 	// If we can find an answer for the final question, then this user has already DONE this survey, so return a response saying they have.
 	
 	$query = "select count(*) as counter_value from answers where user_id = " . $user_id . " and survey_id = " . $survey_id . " and question_id = " . $total_questions . " order by question_id asc";
-	//nice_print_r($query);
-	$result = mysql_query($query) or die("Database Error: " . mysql_error()); 
+	$result = run_query($query);
 	$row = mysql_fetch_array($result);
 	
 	$final_output = 'Thank you for completing the survey.<br><a href="surveylist.php">Click Here</a> to return to survey list.';
@@ -49,8 +47,8 @@
 		}
 		else
 		{
-			echo '<pre>'.print_r($_POST).'</pre>';
-			echo "Button not pressed";
+			//echo '<pre>'.print_r($_POST).'</pre>';
+			//echo "Button not pressed";
 		}
 		
 		if($question_submitted)
@@ -76,7 +74,7 @@
 			// we need to store the last question in the database
 			
 			//print_r($query0);
-			$result = mysql_query($query) or die("Database Error0: " . mysql_error()); 
+			$result = run_query($query);
 			
 			if((int)$finshBtn==2)
 			{
@@ -106,20 +104,19 @@
  select *
  from questions
  where survey_id = " . $survey_id . " and question_id = " . $question_id;
- nice_print_r($query);
  
  // Get the data
- $result = mysql_query($query) or die("Database Error1: " . mysql_error()); 
+ $result = run_query($query);
  $row = mysql_fetch_array($result);
  
  // check if it's not a fill in the blank type question
  $qtype_id = $row["qtype_id"];
- nice_print_r($qtype_id);
+ //nice_print_r($qtype_id);
  if((int)$qtype_id!=3) // that hardcoding tho...
  {
 	$query2 = "select * from question_options where question_id = " . $question_id . " order by option_id asc";
-	nice_print_r($query2);
-	$result2 = mysql_query($query2) or die("Database Error2: " . mysql_error()); 
+	//nice_print_r($query2);
+	$result2 = run_query($query2);
 	//echo "<p>got question id: " . $question_id . "</p>";
  }
 

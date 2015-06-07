@@ -31,13 +31,13 @@ if($_POST['firstName'] != "" && $_POST['lastName'] != ""
 
     $query = "insert into users(email, password, first_name, last_name) 
               values('". $email ."', '". $password ."', '". $firstName ."', '". $lastName ."')";
-    $result = mysql_query($query) or die("Database Error: " . mysql_error());
+    $result = run_query($query);
 
     echo "Account Created!";
 
     $query = "select * from users where email = '" . $email . "' and password = '" . $password . "'";
 
-    $result = mysql_query($query) or die("Database Error: " . mysql_error());
+    $result = run_query($query);
     // TODO: refactor this if time permits.
     $num_rows = mysql_num_rows($result); 
     $row = mysql_fetch_array($result);
@@ -52,6 +52,10 @@ if($_POST['firstName'] != "" && $_POST['lastName'] != ""
         header("Location: surveylist.php");
         die();
     }
+	else
+	{
+		nice_print_r($row);
+	}
 }
 }
 

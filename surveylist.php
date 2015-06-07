@@ -10,7 +10,7 @@ $query = "SELECT * FROM surveys order by creation_date desc";
 
 <?php
 // Get all the data
-$result = mysql_query($query) or die("Database Error: " . mysql_error()); 
+$result = run_query($query);
 ?>
 
 <!--Processes of Object Oriented Software Project 1-->

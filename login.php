@@ -45,7 +45,7 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 	//print_r("<p><p><p>");
 	//print_r($query);
 	//print_r("<p><p><p>");
-	$result = mysql_query($query) or die("Database Error: " . mysql_error());
+	$result = run_query($query);
 	// TODO: refactor this if time permits.
 	$num_rows = mysql_num_rows($result); // really lame way to authenticate, but it's almost midnight and time is a factor tonight.
 	$row = mysql_fetch_array($result);
