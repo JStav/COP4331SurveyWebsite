@@ -13,6 +13,8 @@
 		
 if($_POST['questionTextBox'] != "")
 {	
+
+	
 	$questionTextBox = $_POST['questionTextBox'];
 	$questionType = $_POST['questionType'];
 	$choice1 = $_POST['c1'];
@@ -25,10 +27,10 @@ if($_POST['questionTextBox'] != "")
 	//print_r($_POST['questionType']);
 	if($questionNum == "" || $surveyid == "")
 	{		
+		
 		$questionNum = (int) 1;				
 		// Force the survey_id by getting the current max id and adding+1
 		$query = "SELECT max(survey_id) as survey_id from surveys";
-		nice_print_r($query);
 		$result = mysql_query($query) or die("1Database Error: " . mysql_error());
  		$row = mysql_fetch_array($result);
 		$surveyid = (int) $row["survey_id"];
@@ -36,12 +38,12 @@ if($_POST['questionTextBox'] != "")
 
 		// surveys table
 		$query = "INSERT into surveys(survey_id, survey_name) VALUES(".$surveyid.",'".$surveyname."')";
-		nice_print_r($query);
+		echo $query . "<br>";
 		$result = mysql_query($query) or die("2Database Error: " . mysql_error()); 
 		
 		// user_surveys table
 		$query = "INSERT into user_surveys(user_id, survey_id, relation_id) VALUES(".$user_id.",".$surveyid.",1)"; // relation_id = 1 creator
-		nice_print_r($query);
+		
 		$result = mysql_query($query) or die("3Database Error: " . mysql_error()); 		
 	}
 	else
@@ -52,7 +54,6 @@ if($_POST['questionTextBox'] != "")
 	{		
 		// question table
 		$query = "INSERT into questions(question_id, survey_id, qtype_id, question_text) VALUES(".$questionNum.",".$surveyid.",1,'".$questionTextBox."')";
-		nice_print_r($query);
 		$result = mysql_query($query) or die("4Database Error: " . mysql_error()); 		
 		// choice Doesn't matter
 
@@ -62,31 +63,25 @@ if($_POST['questionTextBox'] != "")
 		//choices Do matter!
 		// question table
 		$query = "INSERT into questions(question_id, survey_id, qtype_id, question_text) VALUES(".$questionNum.",".$surveyid.",2,'".$questionTextBox."')";
-		nice_print_r($query);
-		$result = mysql_query($query) or die("5Database Error_1: " . mysql_error());
+		$result = mysql_query($query) or die("5Database Error: " . mysql_error());
 		// question options table
-		$query = "INSERT into question_options(option_id, question_id, survey_id, option_text) VALUES(1, ".$questionNum.",".$surveyid.",'".$choice1."')";
-		nice_print_r($query);
-		$result = mysql_query($query) or die("6Database Error_2: " . mysql_error());       
+		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",1, '".$chocie1."')";
+		$result = mysql_query($query) or die("6Database Error: " . mysql_error());       
 
-		$query = "INSERT into question_options(option_id, question_id, survey_id, option_text) VALUES(2, ".$questionNum.",".$surveyid.",'".$choice2."')";
-		nice_print_r($query);
-		$result = mysql_query($query) or die("7Database Error_3: " . mysql_error());  
+		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",2, '".$chocie2."')";
+		$result = mysql_query($query) or die("7Database Error: " . mysql_error());  
 
-		$query = "INSERT into question_options(option_id, question_id, survey_id, option_text) VALUES(3, ".$questionNum.",".$surveyid.",'".$choice3."')";
-		nice_print_r($query);
-		$result = mysql_query($query) or die("8Database Error_4: " . mysql_error());  
+		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",3, '".$chocie3."')";
+		$result = mysql_query($query) or die("8Database Error: " . mysql_error());  
 
-		$query = "INSERT into question_options(option_id, question_id, survey_id, option_text) VALUES(4, ".$questionNum.",".$surveyid.",'".$choice4."')";
-		nice_print_r($query);
-		$result = mysql_query($query) or die("9Database Error_5: " . mysql_error()); 
+		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",4, '".$chocie4."')";
+		$result = mysql_query($query) or die("9Database Error: " . mysql_error());  		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",2, '".$chocie2."')";		$result = mysql_query($query) or die("Database Error: " . mysql_error());                                                		                                                                                                                         		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",3, '".$chocie3."')";		$result = mysql_query($query) or die("Database Error: " . mysql_error());                                                		                                                                                                                         		$query = "INSERT into question_options(survey_id, question_id, option_id, option_text) VALUES(".$user_id.",".$surveyid.",4, '".$chocie4."')";		$result = mysql_query($query) or die("Database Error: " . mysql_error()); 
 	}	
 	else if($_POST['questionType'] == "3")
 	{
 		// choices don't matter
 		// question table
 		$query = "INSERT into questions(question_id, survey_id, qtype_id, question_text) VALUES(".$questionNum.",".$surveyid.",3,'".$questionTextBox."')";	
-		nice_print_r($query);
 		$result = mysql_query($query) or die("10Database Error: " . mysql_error()); 
 	}
 	

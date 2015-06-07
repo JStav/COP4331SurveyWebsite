@@ -13,7 +13,7 @@ $mysql_password = "testpass1";
 	function sanitize_value($input)
 	{
 		// sanitize a value BEFORE placing it into the query string!
-		$input = stripslashes(input);
+		$input = stripslashes($input);
 		$input = str_replace('"', '\"',$input);
 		$input = str_replace("'", "\'",$input);
 		return $input;
