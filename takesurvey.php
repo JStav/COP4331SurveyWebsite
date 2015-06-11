@@ -25,7 +25,7 @@
 	$result = run_query($query);
 	$row = mysql_fetch_array($result);
 	
-	$final_output = 'Thank you for completing the survey.<br><a href="surveylist.php">Click Here</a> to return to survey list.';
+	$final_output = '<p>Thank you for completing the survey.<br><a href="surveylist.php">Click Here</a> to return to survey list.</p>';
 	if((int)$row["counter_value"]>0)
 	{
 		//nice_print_r((int)$row["counter_value"]);
@@ -58,7 +58,8 @@
 			{
 				$options = $_POST["options"];
 				sanitize_value($options);
-
+				if($options == ""){$options = 1;} // defaults to the first option if nothing was selected
+				
 				$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$options."')";	
 				//echo "<p>NOT QTYPE 3:".$query."</p>";
 			}
@@ -66,7 +67,8 @@
 			{
 				// short answer type			
 				$answer = $_POST["answer"];
-				sanitize_value($answer);				
+				sanitize_value($answer);	
+				if($answer == ""){$answer = "No response.";}	// defaults to "No Response" if no response is given.
 				$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$answer."')";	
 				//echo "<p>QTYPE 3:".$query."</p>";
 				//die($query);
@@ -174,16 +176,17 @@
 
 	
 	<br><br>
-	<button type="reset" >Clear</button><br>
+	<button type="reset" >Clear</button>
 	<input type="hidden" id="survey_id" name="survey_id" value="<?php echo $survey_id; ?>">
 	<input type="hidden" id="question_id" name="question_id" value="<?php echo $question_id; ?>">
 	<input type="hidden" id="qtype_id" name="qtype_id" value="<?php echo $qtype_id; ?>">
 	<?php
-	
+	/*
 	if($question_id <= $total_questions && $question_id > 1)
 	{
 		echo '<button type="submit" id="prevBtn" name="prevBtn" value="-1">Previous Question</button> ';
 	}
+	*/
 	if($question_id < $total_questions)
 	{
 		echo '<button type="submit" id="nextBtn" name="nextBtn"  value="1">Next Question</button> ';
