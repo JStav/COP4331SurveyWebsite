@@ -77,7 +77,7 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 <html>
 <head>
 <meta charset="utf-8">
-<title>Sweet Survey</title>
+<title>Super Sweet Survey</title>
 </head>
 
 <body>
@@ -92,8 +92,8 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 <h1> Login </h1>
 <?php echo $current_path; ?>
   <form name="login" id="login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-            Username<input type="text" name="userid" id="userid" />
-            Password<input type="password" name="pswrd" id="pswrd" />
+            Username <input type="text" name="userid" id="userid" /><br>
+            Password  <input type="password" name="pswrd" id="pswrd" /><br>
             <!-- <input type="submit" onclick="check(this.form)" value="Login"/> -->
 			<input type="submit" id="submit" value="Login"/>
             <input type="reset" value="Clear"/>
@@ -101,6 +101,7 @@ if($_POST['userid'] != "" && $_POST['pswrd'] != "")
 
   </aside>
  <aside id="signup">
+ <a href="passwordreset.php"> Forgot Password </a>
 <h1> Don't have an account? <a href="signup.php"> Sign up! </a></h1>
  </aside> 
 </body>
