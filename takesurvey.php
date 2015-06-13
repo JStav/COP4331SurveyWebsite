@@ -116,7 +116,7 @@
  //nice_print_r($qtype_id);
  if((int)$qtype_id!=3) // that hardcoding tho...
  {
-	$query2 = "select * from question_options where question_id = " . $question_id . " order by option_id asc";
+	$query2 = "select * from question_options where question_id = " . $question_id . " and survey_id = " . $survey_id . " order by option_id asc";
 	//nice_print_r($query2);
 	$result2 = run_query($query2);
 	//echo "<p>got question id: " . $question_id . "</p>";
