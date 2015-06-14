@@ -33,7 +33,7 @@
 		
 	}
 	
-	if(isset($_POST["question_id"]))
+	if(isset($_POST["question_id"]) && isset($_POST["options"]))
 	{
 		$question_id = $_POST["question_id"];
 		// check to see if next or previous or final submit was used here
@@ -53,6 +53,7 @@
 		
 		if($question_submitted)
 		{
+			
 			// if not short answer question
 			if($qtype_id != 3)
 			{
