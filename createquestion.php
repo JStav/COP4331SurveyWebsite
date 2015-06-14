@@ -3,6 +3,7 @@
  <?php
 	//print_r($_POST);
  $surveyname = $_POST['surveyname']; // from previous page
+ $validSubmission = true; // used as a flag to check that a question option has been filled out properly.
  
  $surveyid = $_POST['surveyid']; // generated from this page after a person clicks add or done button (we only need one or the other, name for brand new, id for rest)
  /*
@@ -55,8 +56,14 @@ if($_POST['questionTextBox'] != "")
 	}
 	else if($_POST['questionType'] == "2")
 	{
+		// If any of the choices are blank, it'll flag this as false and won't allow the question to be inserted.
+		$validSubmission = ($choice1 != "" && $choice2 != "" && $choice3 != "" && $choice4 != ""); 
 		//choices Do matter!
 		// question table
+		
+		
+		if($validSubmission)
+		{
 		$query = "INSERT into questions(question_id, survey_id, qtype_id, question_text) VALUES(".$questionNum.",".$surveyid.",2,'".$questionTextBox."')";
 		$result = run_query($query);
 		
@@ -72,6 +79,11 @@ if($_POST['questionTextBox'] != "")
 		
 		$query = "INSERT into question_options(option_id, question_id, survey_id, option_text) VALUES(4, ".$questionNum.",".$surveyid.",'".$choice4."')";
 		$result = run_query($query);
+		}
+		else
+		{
+			echo '<p class="error">Missing text for multiple choice(s).</p>';
+		}
 	}	
 	else if($_POST['questionType'] == "3")
 	{
@@ -81,7 +93,7 @@ if($_POST['questionTextBox'] != "")
 		$result = run_query($query);
 	}
 	
-	if(isset($_POST['donebtn']) && $_POST['donebtn']=='Done')
+	if(isset($_POST['donebtn']) && $_POST['donebtn']=='Done' && $validSubmission)
 	{
 		//echo 'donebtn clicked';
 		header("Location: surveylist.php");
@@ -91,9 +103,9 @@ if($_POST['questionTextBox'] != "")
 	}	
 	//die();
 	//if(isset($_POST['addquestionbtn']) && $_POST['addquestionbtn']=='Add Question'){echo 'addquestionbtn clicked';}
-	$questionNum++;
+	if($validSubmission){$questionNum++;}
 }
-else if(isset($_POST['donebtn']) && $_POST['donebtn']=='Done')
+else if(isset($_POST['donebtn']) && $_POST['donebtn']=='Done' && $validSubmission)
 	{
 		//echo 'donebtn clicked';
 		header("Location: surveylist.php");
