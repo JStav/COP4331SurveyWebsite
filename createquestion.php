@@ -3,6 +3,11 @@
  <?php
 	//print_r($_POST);
  $surveyname = $_POST['surveyname']; // from previous page
+ if($surveyname == "")
+ {
+	 // error, no survey name was ever given
+	 die("<p>Error! No survey name was provided</p>");
+ }
  $validSubmission = true; // used as a flag to check that a question option has been filled out properly.
  
  $surveyid = $_POST['surveyid']; // generated from this page after a person clicks add or done button (we only need one or the other, name for brand new, id for rest)
@@ -12,8 +17,7 @@
  	die("Error: Survey name is blank");
  }*/
 		
-if($_POST['questionTextBox'] != "")
-{	
+
 	$questionTextBox = $_POST['questionTextBox'];
 	$questionType = $_POST['questionType'];
 	$choice1 = $_POST['c1'];
@@ -24,6 +28,8 @@ if($_POST['questionTextBox'] != "")
 	$surveyid = $_POST['surveyid'];
 	//print_r($questionNum);
 	//print_r($_POST['questionType']);
+if($_POST['questionTextBox'] != "")
+{	
 	if($questionNum == "" || $surveyid == "")
 	{		
 		$questionNum = (int) 1;				

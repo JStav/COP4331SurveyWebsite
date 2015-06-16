@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ERROR | E_PARSE); // hide php server level warning messages to users about db being offline etc
+//error_reporting(E_ERROR | E_PARSE); // hide php server level warning messages to users about db being offline etc
 
 $mysql_host = "mysql4.000webhost.com";
 $mysql_database = "a9634422_survey";
@@ -21,9 +21,9 @@ $mysql_password = "testpass1";
 	
 	function nice_print_r($input)
 	{
-		echo '<p><pre>Nice Print_R: |';
-		print_r($input);
-		echo '|</pre></p>';
+		//echo '<p><pre>Nice Print_R: |';
+		//print_r($input);
+		//echo '|</pre></p>'; 
 	}
 	
 	

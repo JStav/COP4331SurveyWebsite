@@ -32,75 +32,88 @@
 		die($final_output);
 		
 	}
-	
-	if(isset($_POST["question_id"]) && isset($_POST["options"]))
+	else
 	{
+		nice_print_r((int)$row["counter_value"]);
+	}
+	
+	if(isset($_POST["question_id"]) && (isset($_POST["options"]) || isset($_POST["answer"])))
+	{
+		nice_print_r("this happened8");
 		$question_id = $_POST["question_id"];
 		// check to see if next or previous or final submit was used here
 		$question_submitted = false;
 		$nextBtn =$_POST['nextBtn']; 
 		$prevBtn =$_POST['prevBtn']; 
 		$finshBtn =$_POST['finshBtn']; 
-		if((int)$nextBtn==1 || (int)$prevBtn==-1 || (int)$finshBtn==2)
-		{
-			$question_submitted = true;
-		}
-		else
-		{
-			//echo '<pre>'.print_r($_POST).'</pre>';
-			//echo "Button not pressed";
-		}
-		
-		if($question_submitted)
-		{
-			
-			// if not short answer question
-			if($qtype_id != 3)
-			{
-				$options = $_POST["options"];
-				sanitize_value($options);
-				if($options == ""){$options = 1;} // defaults to the first option if nothing was selected
-				
-				$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$options."')";	
-				//echo "<p>NOT QTYPE 3:".$query."</p>";
-			}
-			else if($qtype_id==3)
-			{
-				// short answer type			
-				$answer = $_POST["answer"];
-				sanitize_value($answer);	
-				if($answer == ""){$answer = "No response.";}	// defaults to "No Response" if no response is given.
-				$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$answer."')";	
-				//echo "<p>QTYPE 3:".$query."</p>";
-				//die($query);
-			}
-			// we need to store the last question in the database
-			
-			//print_r($query0);
-			$result = run_query($query);
-			
-			if((int)$finshBtn==2)
-			{
-				die($final_output);
-			}
-		}
-		if((int)$nextBtn==1)
-		{
-			if($question_id < $total_questions){$question_id++;}
-		}
-		else if((int)$prevBtn==-1)
-		{
-			if($question_id <= $total_questions && $question_id > 1){$question_id--;}
-		}
-
-		
 	}
 	else
 	{
 		$question_id = $row0["question_id"];
-		
+		nice_print_r("this happened1");
 		
 	}
+		
+	if((int)$nextBtn==1 || (int)$prevBtn==-1 || (int)$finshBtn==2)
+	{
+		$question_submitted = true;
+		nice_print_r("this happened6");
+	}
+	else
+	{
+		//echo '<pre>'.print_r($_POST).'</pre>';
+		//echo "Button not pressed";
+		nice_print_r("this happened7");
+	}
+	
+	if($question_submitted)
+	{
+		nice_print_r("this happened2");
+		// if not short answer question
+		if($qtype_id != 3)
+		{
+			nice_print_r("this happened5");
+			$options = $_POST["options"];
+			sanitize_value($options);
+			if($options == ""){$options = 1;} // defaults to the first option if nothing was selected
+			
+			$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$options."')";	
+			//echo "<p>NOT QTYPE 3:".$query."</p>";
+		}
+		else if($qtype_id==3)
+		{
+			// short answer type	
+nice_print_r("this happened4");				
+			$answer = $_POST["answer"];
+			sanitize_value($answer);	
+			if($answer == ""){$answer = "No response.";}	// defaults to "No Response" if no response is given.
+			$query = "INSERT into answers (question_id, user_id, survey_id, answer) VALUES(".$question_id.",".$user_id.",".$survey_id.",'".$answer."')";	
+			//echo "<p>QTYPE 3:".$query."</p>";
+			//die($query);
+		}
+		// we need to store the last question in the database
+		nice_print_r("this happened3");
+		//print_r($query0);
+		$result = run_query($query);
+		
+		if((int)$finshBtn==2)
+		{
+			die($final_output);
+		}
+	}
+	
+	
+	if((int)$nextBtn==1)
+	{
+		if($question_id < $total_questions){$question_id++;}
+	}
+	else if((int)$prevBtn==-1)
+	{
+		if($question_id <= $total_questions && $question_id > 1){$question_id--;}
+	}
+
+		
+	
 
  // TODO: Add binding of php variable to avoid php injections
  $query = "
@@ -125,6 +138,7 @@
 
  
  // Need another query to populate previously answered questions
+ nice_print_r("<p>got question id: " . $question_id . "</p>");
  
  ?>
 <!DOCTYPE html>
