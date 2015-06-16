@@ -1,4 +1,4 @@
 <?php
-echo "Hello World!";
-// phpinfo();
+header("Location: surveylist.php");
+	die();
 ?>
